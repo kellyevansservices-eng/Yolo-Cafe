@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu — YOLO Cafe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A0F05;--mocha:#3B1F0A;--amber:#C8821A;--amber2:#E4A030;
+  --cream:#FBF6EE;--offwhite:#FFF9F2;--sage:#3E6B4E;--sage2:#5A9168;
+  --blush:#F5E8D5;--mid:#7A5535;--light:#B08860;--border:rgba(58,31,10,0.1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--offwhite);color:var(--ink);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3.5rem;height:64px;background:var(--ink);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none;letter-spacing:0.04em;}
+.nav-logo span{color:var(--amber2);}
+.nav-center{display:flex;align-items:center;}
+.nav-center a{color:rgba(255,255,255,0.72);text-decoration:none;font-size:0.82rem;font-weight:500;letter-spacing:0.06em;padding:0 1.1rem;height:64px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:all .2s;}
+.nav-center a:hover,.nav-center a.active{color:#fff;border-bottom-color:var(--amber2);}
+.nav-right{display:flex;align-items:center;gap:0.75rem;}
+.btn-ghost{padding:0.42rem 1.1rem;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);font-size:0.78rem;font-weight:500;border-radius:3px;text-decoration:none;transition:all .2s;letter-spacing:0.05em;}
+.btn-ghost:hover{border-color:var(--amber2);color:var(--amber2);}
+.btn-nav-solid{padding:0.42rem 1.2rem;background:var(--amber);color:#fff;font-size:0.78rem;font-weight:600;border-radius:3px;text-decoration:none;transition:all .2s;letter-spacing:0.05em;}
+.btn-nav-solid:hover{background:var(--amber2);color:var(--ink);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;}
+.mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;z-index:190;background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.08);padding:1.5rem;flex-direction:column;gap:1rem;}
+.mobile-nav.open{display:flex;}
+.mobile-nav a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:0.95rem;font-weight:500;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.mobile-nav a:hover{color:var(--amber2);}
+
+/* ── MENU HERO ── */
+.menu-hero{
+  margin-top:64px;background:var(--ink);padding:3.5rem 3.5rem 0;
+  text-align:center;
+}
+.menu-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:400;color:#fff;margin-bottom:0.5rem;}
+.menu-hero h1 em{font-style:italic;color:var(--amber2);}
+.menu-hero p{color:rgba(255,255,255,0.55);font-size:0.9rem;font-weight:300;margin-bottom:2rem;}
+.back-link{display:inline-flex;align-items:center;gap:0.4rem;color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.8rem;margin-bottom:1.5rem;transition:.2s;}
+.back-link:hover{color:var(--amber2);}
+
+/* ── STICKY TOP NAV ── */
+.menu-tab-nav{
+  position:sticky;top:64px;z-index:150;
+  background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.08);
+  overflow-x:auto;white-space:nowrap;
+  display:flex;align-items:center;padding:0 2rem;
+  scrollbar-width:none;
+}
+.menu-tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  padding:0 1.2rem;height:52px;
+  color:rgba(255,255,255,0.55);font-size:0.82rem;font-weight:500;
+  background:none;border:none;cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .2s;white-space:nowrap;
+}
+.tab-btn:hover{color:rgba(255,255,255,0.9);}
+.tab-btn.active{color:var(--amber2);border-bottom-color:var(--amber2);}
+
+/* ── SEARCH BAR ── */
+.search-wrap{
+  background:var(--cream);padding:1.5rem 3.5rem;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:1rem;
+}
+.search-input{
+  flex:1;max-width:420px;
+  padding:0.65rem 1rem;border:1px solid var(--border);
+  border-radius:4px;font-family:'DM Sans',sans-serif;
+  font-size:0.88rem;background:#fff;color:var(--ink);
+  outline:none;transition:border-color .2s;
+}
+.search-input:focus{border-color:var(--amber);}
+.search-input::placeholder{color:var(--light);}
+.search-count{font-size:0.8rem;color:var(--light);}
+
+/* ── MENU BODY ── */
+.menu-body{max-width:1100px;margin:0 auto;padding:3rem 3.5rem 5rem;}
+
+/* ── MENU SECTION ── */
+.menu-section{margin-bottom:4rem;}
+.menu-section-header{
+  display:flex;align-items:center;gap:1rem;
+  padding:1.2rem 1.5rem;
+  background:var(--ink);border-radius:6px 6px 0 0;
+  margin-bottom:1px;
+}
+.menu-section-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem;font-weight:600;color:#fff;
+}
+.menu-section-sub{font-size:0.78rem;color:rgba(255,255,255,0.45);margin-left:auto;}
+
+/* ── SUBCATEGORY ── */
+.subcat{margin-bottom:2rem;}
+.subcat-label{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--amber);padding:0.8rem 0;
+  border-bottom:1px solid var(--border);width:100%;margin-bottom:1rem;
+}
+
+/* ── ITEM GRID ── */
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+
+/* ── ITEM CARD ── */
+.item-card{
+  background:#fff;border:1px solid var(--border);border-radius:6px;
+  overflow:hidden;transition:all .22s;cursor:pointer;
+}
+.item-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(26,15,5,0.1);border-color:var(--amber);}
+.item-card-body{padding:1.1rem 1.2rem;}
+.item-header{display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem;margin-bottom:0.4rem;}
+.item-name{font-size:0.95rem;font-weight:600;color:var(--ink);line-height:1.3;}
+.item-price{
+  font-size:0.88rem;font-weight:700;color:var(--amber);
+  white-space:nowrap;flex-shrink:0;
+}
+.item-desc{font-size:0.78rem;color:var(--mid);line-height:1.55;font-weight:300;margin-bottom:0.8rem;}
+.item-footer{display:flex;align-items:center;justify-content:space-between;}
+.btn-details{
+  font-size:0.72rem;font-weight:600;color:var(--sage);
+  background:none;border:none;cursor:pointer;letter-spacing:0.05em;
+  text-transform:uppercase;padding:0;transition:.2s;
+}
+.btn-details:hover{color:var(--amber);}
+.item-emoji{font-size:1.1rem;}
+
+/* ── MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(26,15,5,0.75);
+  align-items:center;justify-content:center;padding:1.5rem;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:#fff;border-radius:8px;max-width:500px;width:100%;
+  max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(26,15,5,0.35);
+  animation:modalIn .25s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+.modal-header{
+  background:var(--ink);padding:1.5rem 1.5rem 1.2rem;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;
+}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:#fff;}
+.modal-close{
+  background:none;border:none;color:rgba(255,255,255,0.5);
+  font-size:1.4rem;cursor:pointer;padding:0;line-height:1;transition:.2s;flex-shrink:0;
+}
+.modal-close:hover{color:#fff;}
+.modal-body{padding:1.5rem;}
+.modal-price{font-size:1.5rem;font-weight:700;color:var(--amber);margin-bottom:0.8rem;}
+.modal-desc{font-size:0.92rem;color:var(--mid);line-height:1.75;font-weight:300;margin-bottom:1.2rem;}
+.modal-tag{
+  display:inline-block;background:var(--cream);color:var(--mid);
+  font-size:0.72rem;font-weight:500;padding:0.25rem 0.65rem;
+  border-radius:20px;border:1px solid var(--border);margin-right:.4rem;margin-bottom:.4rem;
+}
+.modal-actions{display:flex;gap:0.75rem;margin-top:1.5rem;}
+.btn-modal-wa{
+  flex:1;padding:0.8rem;background:#25D366;color:#fff;
+  border:none;border-radius:4px;font-size:0.85rem;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;
+  text-decoration:none;transition:.2s;
+}
+.btn-modal-wa:hover{background:#20b858;}
+.btn-modal-close{
+  flex:1;padding:0.8rem;background:var(--cream);color:var(--mid);
+  border:1px solid var(--border);border-radius:4px;font-size:0.85rem;font-weight:600;
+  cursor:pointer;transition:.2s;
+}
+.btn-modal-close:hover{background:var(--blush);}
+
+/* ── SIDES LIST (compact) ── */
+.sides-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.75rem;}
+.side-item{
+  background:#fff;border:1px solid var(--border);border-radius:5px;
+  padding:0.85rem 1rem;display:flex;align-items:center;justify-content:space-between;
+  transition:all .2s;cursor:pointer;
+}
+.side-item:hover{border-color:var(--amber);background:var(--cream);}
+.side-left{display:flex;align-items:center;gap:0.5rem;}
+.side-emoji{font-size:1.1rem;}
+.side-name{font-size:0.85rem;font-weight:500;color:var(--ink);}
+.side-price{font-size:0.82rem;font-weight:700;color:var(--amber);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  nav{padding:0 1.5rem;}
+  .nav-center{display:none;}
+  .hamburger{display:flex;}
+  .menu-hero{padding:2rem 1.5rem 0;}
+  .search-wrap{padding:1rem 1.5rem;}
+  .menu-body{padding:2rem 1.5rem 4rem;}
+}
+@media(max-width:600px){
+  .items-grid{grid-template-columns:1fr;}
+  .sides-list{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index,html" class="nav-logo">YOLO<span>.</span></a>
+  <div class="nav-center">
+   <a href="file:///C:/Users/kelly/Downloads/yolo%20cafe/index%20(1).html">Home</a>
+<a href="file:///C:/Users/kelly/Downloads/yolo%20cafe/index%20(1).html#locations">Locations</a>
+<a href="file:///C:/Users/kelly/Downloads/yolo%20cafe/index%20(1).html#about">Our Story</a>
+<a href="file:///C:/Users/kelly/Downloads/yolo%20cafe/index%20(1).html#reviews">Reviews</a>
+  <div class="nav-right">
+      </div>
+  <div class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="index.html#about">About Us</a>
+  <a href="index.html#catering">Packages</a>
+  <a href="index.html#services">Services</a>
+  <a href="menu.html">Menu</a>
+  <a href="#">Log In</a>
+  <a href="#">Register</a>
+</div>
+
+<!-- HERO -->
+<div class="menu-hero">
+  <a href="file:///C:/Users/kelly/Downloads/yolo%20cafe/index%20(1).html">← Back to Home</a>
+  <h1>Our <em>Full Menu</em></h1>
+  <p>Browse by category and tap an item for details · Prices in JMD</p>
+</div>
+
+<!-- TAB NAV -->
+<div class="menu-tab-nav" id="tabNav">
+  <div class="menu-tab-nav" id="tabNav">
+  <button class="tab-btn active" onclick="scrollToSection('breakfast', this)">🥞 Breakfast</button>
+  <button class="tab-btn" onclick="scrollToSection('coffee', this)">☕ Coffee & Beverages</button>
+  <button class="tab-btn" onclick="scrollToSection('lunch', this)">🥘 Lunch</button>
+  <button class="tab-btn" onclick="scrollToSection('kids', this)">🌭 Kids Meal</button>
+  <button class="tab-btn" onclick="scrollToSection('dessert', this)">🍨 Dessert</button>
+</div>
+</div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search menu items…" oninput="filterMenu(this.value)">
+  <span class="search-count" id="searchCount"></span>
+</div>
+
+<!-- MENU BODY -->
+<div class="menu-body">
+
+<!-- ══════════════════ BREAKFAST ══════════════════ -->
+<div class="menu-section" id="breakfast">
+  <div class="menu-section-header">
+    <span style="font-size:1.5rem">🥞</span>
+    <div class="menu-section-title">Breakfast</div>
+    <div class="menu-section-sub">Served All Day</div>
+  </div>
+
+  <!-- Omelettes -->
+  <div class="subcat">
+    <div class="subcat-label">🍳 Omelette</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Full House','$1,400','Everything except the kitchen sink 😋','Served with a side of pancakes, waffles or wheat toast','Omelette · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Full House 🍳</div><div class="item-price">$1,400</div></div>
+          <div class="item-desc">Everything except the kitchen sink 😋</div>
+          <div class="item-footer"><span class="item-emoji">🥞 or 🧇 or 🍞 side</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Cheesey With Love','$1,150','A dollop of cheese, bell peppers & onions','Served with a side of pancakes, waffles or wheat toast','Omelette · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Cheesey With Love 🧀</div><div class="item-price">$1,150</div></div>
+          <div class="item-desc">A dollop of cheese, bell peppers & onions</div>
+          <div class="item-footer"><span class="item-emoji">🥞 or 🧇 or 🍞 side</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Mexican Style','$1,500','Fresh salsa, corns, black beans & spices','Served with a side of pancakes, waffles or wheat toast','Omelette · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Mexican Style 🌮</div><div class="item-price">$1,500</div></div>
+          <div class="item-desc">Fresh salsa, corns, black beans & spices</div>
+          <div class="item-footer"><span class="item-emoji">🥞 or 🧇 or 🍞 side</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Veggie Omelette','$1,400','Spinach, bell peppers, onions, broccoli','Served with a side of pancakes, waffles or wheat toast','Omelette · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Veggie 🥦</div><div class="item-price">$1,400</div></div>
+          <div class="item-desc">Spinach, bell peppers, onions, broccoli</div>
+          <div class="item-footer"><span class="item-emoji">🥞 or 🧇 or 🍞 side</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Good Eats -->
+  <div class="subcat">
+    <div class="subcat-label">🌯 Good Eats</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Breakfast Burrito','$950','Soft tortilla with eggs, salsa, sausage/ham & potatoes','','Good Eats · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Breakfast Burrito 🌯</div><div class="item-price">$950</div></div>
+          <div class="item-desc">Soft tortilla with eggs, salsa, sausage/ham & potatoes</div>
+          <div class="item-footer"><span class="item-emoji">🌯</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Ultimate Breakfast Platter','$1,200','2 eggs your way, bacon/ham, served with pancakes or toast','','Good Eats · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Ultimate Breakfast Platter 🍽️</div><div class="item-price">$1,200</div></div>
+          <div class="item-desc">2 eggs your way, bacon/ham, served with pancakes or toast</div>
+          <div class="item-footer"><span class="item-emoji">🍳</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Breakfast Bowl','$950','Eggs, breakfast potato with fresh salsa & cheese','','Good Eats · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Breakfast Bowl 🥣</div><div class="item-price">$950</div></div>
+          <div class="item-desc">Eggs, breakfast potato with fresh salsa & cheese</div>
+          <div class="item-footer"><span class="item-emoji">🥣</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Breakfast Taco','$800','Soft shell tacos with eggs or Ackee (seasonal) and breakfast sausage topped with salsa','','Good Eats · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Breakfast Taco 🌮</div><div class="item-price">$800</div></div>
+          <div class="item-desc">Soft shell tacos with eggs or Ackee (seasonal) and breakfast sausage topped with salsa</div>
+          <div class="item-footer"><span class="item-emoji">🌮</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sandwiches -->
+  <div class="subcat">
+    <div class="subcat-label">🥪 Sandwiches</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('The Famous Egg\'s Benedict','$800','Poached eggs with homemade Benedict sauce on an English muffin','','Sandwiches · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">The Famous Egg's Benedict 🍳</div><div class="item-price">$800</div></div>
+          <div class="item-desc">Poached eggs with homemade Benedict sauce on an English muffin</div>
+          <div class="item-footer"><span class="item-emoji">🥚</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Ham, Eggs & Cheese Croissant','$1,050','Lettuce, tomato, ham, egg & cheese on a croissant','','Sandwiches · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Ham, Eggs & Cheese Croissant 🥐</div><div class="item-price">$1,050</div></div>
+          <div class="item-desc">Lettuce, tomato, ham, egg & cheese</div>
+          <div class="item-footer"><span class="item-emoji">🥐</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Egg & Cheese Croissant','$900','Lettuce, tomato, egg & cheese on a croissant','','Sandwiches · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Egg & Cheese Croissant 🥐</div><div class="item-price">$900</div></div>
+          <div class="item-desc">Lettuce, tomato, egg & cheese</div>
+          <div class="item-footer"><span class="item-emoji">🥐</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Ham, Egg & Cheese Bagel','$1,050','Your choice of bagel, ham, egg & cheese','','Sandwiches · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Ham, Egg & Cheese Bagel 🥯</div><div class="item-price">$1,050</div></div>
+          <div class="item-desc">Your choice of bagel, ham, egg & cheese</div>
+          <div class="item-footer"><span class="item-emoji">🥯</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Ultimate Breakfast Sandwich','$1,000','Sausage patty, egg, lettuce, tomato, onions','','Sandwiches · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Ultimate Breakfast Sandwich 🥪</div><div class="item-price">$1,000</div></div>
+          <div class="item-desc">Sausage patty, egg, lettuce, tomato, onions</div>
+          <div class="item-footer"><span class="item-emoji">🥪</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+      <div class="item-card" onclick="openModal('Bagel Burger','$1,000','Beef patty, bacon, egg and cheese on a toasted bagel served with plantains','','Sandwiches · Breakfast')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Bagel Burger 🥯🍔</div><div class="item-price">$1,000</div></div>
+          <div class="item-desc">Beef patty, bacon, egg and cheese on a toasted bagel served with plantains</div>
+          <div class="item-footer"><span class="item-emoji">🥯</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pancake House -->
+  <div class="subcat">
+    <div class="subcat-label">🥞 Pancake House</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Pancake Tacos','$900','Pancakes served taco style 🥞','','Pancake House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Pancake Tacos 🥞</div><div class="item-price">$900</div></div><div class="item-desc">Pancakes served taco style</div><div class="item-footer"><span class="item-emoji">🥞</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Blueberry Pancakes','$1,150','Fluffy pancakes loaded with fresh blueberries 🫐','','Pancake House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Blueberry Pancakes 🫐</div><div class="item-price">$1,150</div></div><div class="item-desc">Fluffy pancakes loaded with fresh blueberries</div><div class="item-footer"><span class="item-emoji">🫐</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Pancake Sandwich','$900','A creative sandwich made with pancakes 🥞','','Pancake House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Pancake Sandwich 🥪🥞</div><div class="item-price">$900</div></div><div class="item-desc">A creative sandwich made with pancakes</div><div class="item-footer"><span class="item-emoji">🥞</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Pancake With Fresh Fruits','$1,350','Pancakes topped with a selection of fresh fruits 🍓','','Pancake House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Pancake With Fresh Fruits 🍓</div><div class="item-price">$1,350</div></div><div class="item-desc">Pancakes topped with a selection of fresh fruits</div><div class="item-footer"><span class="item-emoji">🍓</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Stacked Pancake','$700','Classic stack of fluffy pancakes 🥞','','Pancake House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Stacked Pancake 🥞</div><div class="item-price">$700</div></div><div class="item-desc">Classic stack of fluffy pancakes</div><div class="item-footer"><span class="item-emoji">🥞</span><button class="btn-details">View Details</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waffle House -->
+  <div class="subcat">
+    <div class="subcat-label">🧇 Waffle House</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Waffle With Ice-Cream','$700','Warm waffles topped with your choice of ice-cream 🍨','','Waffle House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Waffle With Ice-Cream 🍨</div><div class="item-price">$700</div></div><div class="item-desc">Warm waffles topped with your choice of ice-cream</div><div class="item-footer"><span class="item-emoji">🧇</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Waffle & Tenders','$900','Golden waffles served with crispy chicken tenders 🍗','','Waffle House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Waffle & Tenders 🍗</div><div class="item-price">$900</div></div><div class="item-desc">Golden waffles served with crispy chicken tenders</div><div class="item-footer"><span class="item-emoji">🧇</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Wings & Waffles','$1,500','Flavourful wings served alongside golden waffles 🧇','','Waffle House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Wings & Waffles 🍗🧇</div><div class="item-price">$1,500</div></div><div class="item-desc">Flavourful wings served alongside golden waffles</div><div class="item-footer"><span class="item-emoji">🧇</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Waffles & Fresh Fruits','$1,350','Waffles topped with a colourful mix of fresh tropical fruits 🍓','','Waffle House · Breakfast')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Waffles & Fresh Fruits 🍓</div><div class="item-price">$1,350</div></div><div class="item-desc">Waffles topped with a colourful mix of fresh tropical fruits</div><div class="item-footer"><span class="item-emoji">🧇</span><button class="btn-details">View Details</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breakfast Sides -->
+  <div class="subcat">
+    <div class="subcat-label">🥓 Sides</div>
+    <div class="sides-list">
+      <div class="side-item" onclick="openModal('French Toast','$400','Golden french toast 🍞','','Sides · Breakfast')"><div class="side-left"><span class="side-emoji">🍞</span><span class="side-name">French Toast</span></div><span class="side-price">$400</span></div>
+      <div class="side-item" onclick="openModal('Bacon','$300','Crispy strips of bacon 🥓','','Sides · Breakfast')"><div class="side-left"><span class="side-emoji">🥓</span><span class="side-name">Bacon</span></div><span class="side-price">$300</span></div>
+      <div class="side-item" onclick="openModal('Hash Browns','$200','Crispy golden hash browns 🫓','','Sides · Breakfast')"><div class="side-left"><span class="side-emoji">🫓</span><span class="side-name">Hash Browns</span></div><span class="side-price">$200</span></div>
+      <div class="side-item" onclick="openModal('Eggs','$100','Eggs cooked your way 🍳','','Sides · Breakfast')"><div class="side-left"><span class="side-emoji">🍳</span><span class="side-name">Eggs</span></div><span class="side-price">$100</span></div>
+      <div class="side-item" onclick="openModal('Ham','$200','Sliced ham 🍖','','Sides · Breakfast')"><div class="side-left"><span class="side-emoji">🍖</span><span class="side-name">Ham</span></div><span class="side-price">$200</span></div>
+      <div class="side-item" onclick="openModal('Plantain','$150','Sweet fried plantain 🍌','','Sides · Breakfast')"><div class="side-left"><span class="side-emoji">🍌</span><span class="side-name">Plantain</span></div><span class="side-price">$150</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ COFFEE & BEVERAGES ══════════════════ -->
+<div class="menu-section" id="coffee">
+  <div class="menu-section-header">
+    <span style="font-size:1.5rem">☕</span>
+    <div class="menu-section-title">Coffee & Beverages</div>
+    <div class="menu-section-sub">Add flavour for +$150</div>
+  </div>
+
+  <!-- Espresso -->
+  <div class="subcat">
+    <div class="subcat-label">☕ Espresso & Coffee</div>
+    <p style="font-size:0.78rem;color:var(--mid);margin-bottom:1rem;font-weight:300;">Customize with any flavour: vanilla, hazelnut, caramel, coconut, amaretto or dark chocolate (+$150)</p>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Caffe Latte','$450 – $550','Rich espresso topped with steamed milk','Add a flavour of your choice: vanilla, hazelnut, caramel, coconut, amaretto or dark chocolate for +$150','Espresso & Coffee')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Caffe Latte ☕</div><div class="item-price">$450–$550</div></div><div class="item-desc">Rich espresso topped with steamed milk</div><div class="item-footer"><span class="item-emoji">☕</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Cappuccino','$500 – $600','Equal parts espresso, steamed milk and foam','Add a flavour: vanilla, hazelnut, caramel, coconut, amaretto or dark chocolate (+$150)','Espresso & Coffee')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Cappuccino ☕</div><div class="item-price">$500–$600</div></div><div class="item-desc">Equal parts espresso, steamed milk and foam</div><div class="item-footer"><span class="item-emoji">☕</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Vanilla Latte','$550 – $650','Espresso with vanilla syrup and steamed milk','Add a flavour (+$150)','Espresso & Coffee')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Vanilla Latte ☕</div><div class="item-price">$550–$650</div></div><div class="item-desc">Espresso with vanilla syrup and steamed milk</div><div class="item-footer"><span class="item-emoji">☕</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Caffe Mocha','$550 – $650','Espresso with rich chocolate sauce and steamed milk','Add a flavour (+$150)','Espresso & Coffee')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Caffe Mocha ☕</div><div class="item-price">$550–$650</div></div><div class="item-desc">Espresso with rich chocolate sauce and steamed milk</div><div class="item-footer"><span class="item-emoji">☕</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Caramel Macchiato','$550 – $650','Layered espresso, vanilla syrup, steamed milk and caramel drizzle','Add a flavour (+$150)','Espresso & Coffee')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Caramel Macchiato ☕</div><div class="item-price">$550–$650</div></div><div class="item-desc">Layered espresso, vanilla syrup, steamed milk and caramel drizzle</div><div class="item-footer"><span class="item-emoji">☕</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Caffe Americano','$400 – $500','Espresso shots with hot water for a smooth, bold coffee','Add a flavour (+$150)','Espresso & Coffee')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Caffe Americano ☕</div><div class="item-price">$400–$500</div></div><div class="item-desc">Espresso shots with hot water for a smooth, bold coffee</div><div class="item-footer"><span class="item-emoji">☕</span><button class="btn-details">View Details</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coffee & Tea -->
+  <div class="subcat">
+    <div class="subcat-label">🍵 Coffee & Tea</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Brewed Coffee Of The Day','$350 – $500','Our freshly brewed daily coffee selection','','Coffee & Tea')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Brewed Coffee Of The Day ☕</div><div class="item-price">$350–$500</div></div><div class="item-desc">Our freshly brewed daily coffee selection</div><div class="item-footer"><span class="item-emoji">☕</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Tea (Assorted Flavors)','$350 – $500','A selection of assorted tea flavours','','Coffee & Tea')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Tea (Assorted Flavors) 🍵</div><div class="item-price">$350–$500</div></div><div class="item-desc">A selection of assorted tea flavours</div><div class="item-footer"><span class="item-emoji">🍵</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Chai Tea Latte','$500 – $650','Aromatic spiced chai blended with steamed milk','','Coffee & Tea')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Chai Tea Latte 🍵</div><div class="item-price">$500–$650</div></div><div class="item-desc">Aromatic spiced chai blended with steamed milk</div><div class="item-footer"><span class="item-emoji">🍵</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Signature Hot Chocolate','$450 – $550','Rich, velvety house hot chocolate','','Coffee & Tea')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Signature Hot Chocolate ☕</div><div class="item-price">$450–$550</div></div><div class="item-desc">Rich, velvety house hot chocolate</div><div class="item-footer"><span class="item-emoji">🍫</span><button class="btn-details">View Details</button></div></div>
+      </div>
+      <div class="item-card" onclick="openModal('Matcha Latte','$700 – $750','Ceremonial-grade matcha with perfectly frothed milk — YOLO\'s most-loved signature drink!','','Coffee & Tea')">
+        <div class="item-card-body"><div class="item-header"><div class="item-name">Matcha Latte 🍵</div><div class="item-price">$700–$750</div></div><div class="item-desc">Ceremonial-grade matcha with perfectly frothed milk — a YOLO favourite!</div><div class="item-footer"><span class="item-emoji">🍵</span><button class="btn-details">View Details</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boba -->
+  <div class="subcat">
+    <div class="subcat-label">🧋 Non-Coffee / Milk Teas (Boba)</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Mango Boba','$800 – $1,000','Tropical mango milk tea with boba pearls 🥭','','Boba / Milk Tea')"><div class="item-card-body"><div class="item-header"><div class="item-name">Mango 🥭</div><div class="item-price">$800–$1,000</div></div><div class="item-desc">Tropical mango milk tea with boba pearls</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Taro Boba','$800 – $1,000','Creamy taro milk tea with boba pearls','','Boba / Milk Tea')"><div class="item-card-body"><div class="item-header"><div class="item-name">Taro 🧋</div><div class="item-price">$800–$1,000</div></div><div class="item-desc">Creamy taro milk tea with boba pearls</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Cotton Candy Boba','$800 – $1,000','Sweet cotton candy milk tea with boba pearls','','Boba / Milk Tea')"><div class="item-card-body"><div class="item-header"><div class="item-name">Cotton Candy 🧋</div><div class="item-price">$800–$1,000</div></div><div class="item-desc">Sweet cotton candy milk tea with boba pearls</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Bubble Gum Boba','$800 – $1,000','Fun bubble gum milk tea with boba pearls','','Boba / Milk Tea')"><div class="item-card-body"><div class="item-header"><div class="item-name">Bubble Gum 🧋</div><div class="item-price">$800–$1,000</div></div><div class="item-desc">Fun bubble gum milk tea with boba pearls</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Dulce De Leche Boba','$800 – $1,000','Rich dulce de leche milk tea with boba pearls','','Boba / Milk Tea')"><div class="item-card-body"><div class="item-header"><div class="item-name">Dulce De Leche 🧋</div><div class="item-price">$800–$1,000</div></div><div class="item-desc">Rich dulce de leche milk tea with boba pearls</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Pistachio Boba','$800 – $1,000','Smooth pistachio milk tea with boba pearls 💚','','Boba / Milk Tea')"><div class="item-card-body"><div class="item-header"><div class="item-name">Pistachio 💚</div><div class="item-price">$800–$1,000</div></div><div class="item-desc">Smooth pistachio milk tea with boba pearls</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Smoothies & Shakes -->
+  <div class="subcat">
+    <div class="subcat-label">🍓 Smoothies & Shakes</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Fruit Smoothie','$700 – $800','Blended fresh tropical fruits 🍓🥭','','Smoothies & Shakes')"><div class="item-card-body"><div class="item-header"><div class="item-name">Fruit Smoothie 🍓</div><div class="item-price">$700–$800</div></div><div class="item-desc">Blended fresh tropical fruits</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Protein Shake','$800 – $950','Protein-packed blended shake','','Smoothies & Shakes')"><div class="item-card-body"><div class="item-header"><div class="item-name">Protein Shake 🧋</div><div class="item-price">$800–$950</div></div><div class="item-desc">Protein-packed blended shake</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Milkshake','$750 – $950','Creamy classic milkshake','','Smoothies & Shakes')"><div class="item-card-body"><div class="item-header"><div class="item-name">Milkshake 🧋</div><div class="item-price">$750–$950</div></div><div class="item-desc">Creamy classic milkshake</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Bailey\'s Shake','$800 – $850','Indulgent Bailey\'s flavoured shake — for the adults!','','Smoothies & Shakes')"><div class="item-card-body"><div class="item-header"><div class="item-name">Bailey's Shake 🧋</div><div class="item-price">$800–$850</div></div><div class="item-desc">Indulgent Bailey's flavoured shake</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Frappes -->
+  <div class="subcat">
+    <div class="subcat-label">🧋 Frappuccino (Blended Beverages)</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Ultra Caramel Frapp','$850 – $950','Blended caramel frappuccino with whipped cream and caramel drizzle','','Frappuccino')"><div class="item-card-body"><div class="item-header"><div class="item-name">Ultra Caramel 🧋</div><div class="item-price">$850–$950</div></div><div class="item-desc">Blended caramel frappuccino with whipped cream and caramel drizzle</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Oreo Frapp','$800 – $950','Creamy blended Oreo frappuccino','','Frappuccino')"><div class="item-card-body"><div class="item-header"><div class="item-name">Oreo Frapp 🧋</div><div class="item-price">$800–$950</div></div><div class="item-desc">Creamy blended Oreo frappuccino</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Incredible Strawberry Frapp','$900 – $1,000','Fresh strawberry blended frappuccino 🍓','','Frappuccino')"><div class="item-card-body"><div class="item-header"><div class="item-name">Incredible Strawberry 🍓</div><div class="item-price">$900–$1,000</div></div><div class="item-desc">Fresh strawberry blended frappuccino</div><div class="item-footer"><span class="item-emoji">🍓</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Mocha Frapp','$800 – $900','Blended mocha frappuccino with chocolate drizzle','','Frappuccino')"><div class="item-card-body"><div class="item-header"><div class="item-name">Mocha Frapp 🧋</div><div class="item-price">$800–$900</div></div><div class="item-desc">Blended mocha frappuccino with chocolate drizzle</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Dulce De Leche Creme Frapp','$900 – $1,000','Rich dulce de leche blended creme frappuccino','','Frappuccino')"><div class="item-card-body"><div class="item-header"><div class="item-name">Dulce De Leche Creme 🧋</div><div class="item-price">$900–$1,000</div></div><div class="item-desc">Rich dulce de leche blended creme frappuccino</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Java Chip Frapp','$800 – $900','Coffee frappuccino with chocolate chips and mocha sauce','','Frappuccino')"><div class="item-card-body"><div class="item-header"><div class="item-name">Java Chip Frapp 🧋</div><div class="item-price">$800–$900</div></div><div class="item-desc">Coffee frappuccino with chocolate chips and mocha sauce</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('White Chocolate Frapp','$800 – $900','Creamy white chocolate blended frappuccino','','Frappuccino')"><div class="item-card-body"><div class="item-header"><div class="item-name">White Chocolate Frapp 🧋</div><div class="item-price">$800–$900</div></div><div class="item-desc">Creamy white chocolate blended frappuccino</div><div class="item-footer"><span class="item-emoji">🧋</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Refreshers -->
+  <div class="subcat">
+    <div class="subcat-label">🥤 Refreshers</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Lemon Iced Tea','$500 – $600','Refreshing iced tea with fresh lemon 🍋','','Refreshers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Lemon Iced Tea 🍋</div><div class="item-price">$500–$600</div></div><div class="item-desc">Refreshing iced tea with fresh lemon</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Iced Coffee','$820 – $920','Chilled brewed coffee over ice','','Refreshers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Iced Coffee 🧋</div><div class="item-price">$820–$920</div></div><div class="item-desc">Chilled brewed coffee over ice</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Mocha Iced Coffee','$820 – $920','Iced coffee with rich mocha flavour','','Refreshers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Mocha Iced Coffee 🧋</div><div class="item-price">$820–$920</div></div><div class="item-desc">Iced coffee with rich mocha flavour</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Kale Tonic','$900 – $1,000','Refreshing kale-based tonic drink 🥬','','Refreshers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Kale Tonic 🥬</div><div class="item-price">$900–$1,000</div></div><div class="item-desc">Refreshing kale-based tonic drink</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Strawberry Acai','$700 – $800','Vibrant strawberry acai refresher 🍓','','Refreshers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Strawberry Acai 🍓</div><div class="item-price">$700–$800</div></div><div class="item-desc">Vibrant strawberry acai refresher</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Summer Chill','$500 – $600','A cool refreshing summer drink 🥤','','Refreshers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Summer Chill 🥤</div><div class="item-price">$500–$600</div></div><div class="item-desc">A cool refreshing summer drink</div><div class="item-footer"><span class="item-emoji">🥤</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Extras -->
+  <div class="subcat">
+    <div class="subcat-label">🥥 Extras / Add-Ons</div>
+    <div class="sides-list">
+      <div class="side-item" onclick="openModal('Double Shot','$350','Add an extra double shot of espresso 🥃','','Extras')"><div class="side-left"><span class="side-emoji">🥃</span><span class="side-name">Double Shot</span></div><span class="side-price">$350</span></div>
+      <div class="side-item" onclick="openModal('Almond Milk','$350','Swap to almond milk 🌰','','Extras')"><div class="side-left"><span class="side-emoji">🌰</span><span class="side-name">Almond Milk</span></div><span class="side-price">$350</span></div>
+      <div class="side-item" onclick="openModal('Oat Milk','$150','Swap to oat milk 🌾','','Extras')"><div class="side-left"><span class="side-emoji">🌾</span><span class="side-name">Oat Milk</span></div><span class="side-price">$150</span></div>
+      <div class="side-item" onclick="openModal('Soy Milk','$150','Swap to soy milk 🥛','','Extras')"><div class="side-left"><span class="side-emoji">🥛</span><span class="side-name">Soy Milk</span></div><span class="side-price">$150</span></div>
+      <div class="side-item" onclick="openModal('Coconut Milk','$150','Swap to coconut milk 🥥','','Extras')"><div class="side-left"><span class="side-emoji">🥥</span><span class="side-name">Coconut Milk</span></div><span class="side-price">$150</span></div>
+      <div class="side-item" onclick="openModal('Drizzle Sauce','$120','Add a drizzle sauce to your drink 🥥','','Extras')"><div class="side-left"><span class="side-emoji">🍯</span><span class="side-name">Drizzle Sauce</span></div><span class="side-price">$120</span></div>
+      <div class="side-item" onclick="openModal('Whipped Cream','$150','Add whipped cream to your drink 🍦','','Extras')"><div class="side-left"><span class="side-emoji">🍦</span><span class="side-name">Whipped Cream</span></div><span class="side-price">$150</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ LUNCH ══════════════════ -->
+<div class="menu-section" id="lunch">
+  <div class="menu-section-header">
+    <span style="font-size:1.5rem">🥘</span>
+    <div class="menu-section-title">Lunch</div>
+    <div class="menu-section-sub">Mains, Salads, Wraps & More</div>
+  </div>
+
+  <!-- Something Nice -->
+  <div class="subcat">
+    <div class="subcat-label">😋 Something Nice Yum!!</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Chicken Bacon Panini','$1,450','Glazed chicken with lettuce & tomato on a foot long bread','Served with fries','Lunch Mains')"><div class="item-card-body"><div class="item-header"><div class="item-name">Chicken Bacon Panini 🥖</div><div class="item-price">$1,450</div></div><div class="item-desc">Glazed chicken with lettuce & tomato on a foot long bread — served with fries</div><div class="item-footer"><span class="item-emoji">🍟</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Chicken Fajitas','$1,350','Grilled chicken with bell peppers and cheese on a foot long bread','Served with fries','Lunch Mains')"><div class="item-card-body"><div class="item-header"><div class="item-name">Chicken Fajitas 🫑</div><div class="item-price">$1,350</div></div><div class="item-desc">Grilled chicken with bell peppers and cheese on a foot long bread — served with fries</div><div class="item-footer"><span class="item-emoji">🍟</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Let\'s Talk Wings','$1,500','Sweet Chilli, Buffalo, Spicy or Polynesian','Served with fries or waffles','Lunch Mains')"><div class="item-card-body"><div class="item-header"><div class="item-name">Let's Talk Wings 🍗</div><div class="item-price">$1,500</div></div><div class="item-desc">Sweet Chilli, Buffalo, Spicy or Polynesian · Served with fries or waffles</div><div class="item-footer"><span class="item-emoji">🍗</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Philly Cheese Steak','$1,800','Freshly done steak cuts, lots of cheese with toasted bread','Served with fries','Lunch Mains')"><div class="item-card-body"><div class="item-header"><div class="item-name">Philly Cheese Steak 🥩</div><div class="item-price">$1,800</div></div><div class="item-desc">Freshly done steak cuts, lots of cheese with toasted bread — served with fries</div><div class="item-footer"><span class="item-emoji">🍟</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Salads -->
+  <div class="subcat">
+    <div class="subcat-label">🥗 Salads</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Caesar Salad','$1,300','Romaine lettuce, onions, croutons & grilled chicken','','Salads')"><div class="item-card-body"><div class="item-header"><div class="item-name">Caesar Salad 🥗</div><div class="item-price">$1,300</div></div><div class="item-desc">Romaine lettuce, onions, croutons & grilled chicken</div><div class="item-footer"><span class="item-emoji">🥗</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Garden Salad','$900','Romaine lettuce, carrots, onions & tomatoes','','Salads')"><div class="item-card-body"><div class="item-header"><div class="item-name">Garden Salad 🥗</div><div class="item-price">$900</div></div><div class="item-desc">Romaine lettuce, carrots, onions & tomatoes</div><div class="item-footer"><span class="item-emoji">🥗</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Chef Salad','$1,100','Romaine lettuce, carrots, onions, tomatoes, dried raisins, nuts & seasonal fruits','','Salads')"><div class="item-card-body"><div class="item-header"><div class="item-name">Chef Salad 🥗</div><div class="item-price">$1,100</div></div><div class="item-desc">Romaine lettuce, carrots, onions, tomatoes, dried raisins, nuts & seasonal fruits</div><div class="item-footer"><span class="item-emoji">🥗</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Wraps -->
+  <div class="subcat">
+    <div class="subcat-label">🌯 Wraps</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Peanut Butter Chicken Wrap','$1,300','Salad with avocado, arugula & eggs','','Wraps')"><div class="item-card-body"><div class="item-header"><div class="item-name">Peanut Butter Chicken 🌯</div><div class="item-price">$1,300</div></div><div class="item-desc">Salad with avocado, arugula & eggs</div><div class="item-footer"><span class="item-emoji">🌯</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('BBQ Chicken Wrap','$1,250','Sandwiches with cheese & tomatoes','','Wraps')"><div class="item-card-body"><div class="item-header"><div class="item-name">BBQ Chicken 🌯</div><div class="item-price">$1,250</div></div><div class="item-desc">Sandwiches with cheese & tomatoes</div><div class="item-footer"><span class="item-emoji">🌯</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Curried Chicken Wrap','$1,250','Salad with lemon juice','','Wraps')"><div class="item-card-body"><div class="item-header"><div class="item-name">Curried Chicken 🌯</div><div class="item-price">$1,250</div></div><div class="item-desc">Salad with lemon juice</div><div class="item-footer"><span class="item-emoji">🌯</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Falafel Wrap','$1,400','Falafel, tomato, lettuce, hummus & tahini sauce','','Wraps')"><div class="item-card-body"><div class="item-header"><div class="item-name">Falafel Wrap 🧆</div><div class="item-price">$1,400</div></div><div class="item-desc">Falafel, tomato, lettuce, hummus & tahini sauce</div><div class="item-footer"><span class="item-emoji">🌯</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Hummus Wrap','$1,000','Hummus, veggies & tahini sauce','','Wraps')"><div class="item-card-body"><div class="item-header"><div class="item-name">Hummus Wrap 🌯</div><div class="item-price">$1,000</div></div><div class="item-desc">Hummus, veggies & tahini sauce</div><div class="item-footer"><span class="item-emoji">🌯</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Mexico -->
+  <div class="subcat">
+    <div class="subcat-label">🌮 Take Me To Mexico</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Let\'s Taco Bout It','Chicken $1,200 · Beef $1,000 · Oxtail $1,500 · Shrimp $1,400','2 hard or soft shell tacos with your choice of protein','Choose: Chicken, Beef, Oxtail or Shrimp','Mexican')"><div class="item-card-body"><div class="item-header"><div class="item-name">Let's Taco Bout It 🌮</div><div class="item-price">$1,000–$1,500</div></div><div class="item-desc">2 hard or soft shell tacos — Chicken, Beef, Oxtail or Shrimp</div><div class="item-footer"><span class="item-emoji">🌮</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Nacho Platter','$1,000','Fully loaded sizzling combination of salsa, Mexican cheese and sour cream over freshly done tortilla bites','','Mexican')"><div class="item-card-body"><div class="item-header"><div class="item-name">Nacho Platter 🫔</div><div class="item-price">$1,000</div></div><div class="item-desc">Fully loaded sizzling combination of salsa, Mexican cheese and sour cream over tortilla bites</div><div class="item-footer"><span class="item-emoji">🫔</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Mexy Salad','$1,400','Romaine lettuce, tortilla, cheese, chicken, tomato, onion & nuts','','Mexican')"><div class="item-card-body"><div class="item-header"><div class="item-name">Mexy Salad 🥗</div><div class="item-price">$1,400</div></div><div class="item-desc">Romaine lettuce, tortilla, cheese, chicken, tomato, onion & nuts</div><div class="item-footer"><span class="item-emoji">🌮</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Cancun Style','$1,500','Cajun black peas, corn, rice, veggies, sour cream, guacamole & cheese','Served in a tortilla or bowl','Mexican')"><div class="item-card-body"><div class="item-header"><div class="item-name">Cancun Style 🌮</div><div class="item-price">$1,500</div></div><div class="item-desc">Cajun black peas, corn, rice, veggies, sour cream, guacamole & cheese in a tortilla or bowl</div><div class="item-footer"><span class="item-emoji">🌮</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Vegetarian -->
+  <div class="subcat">
+    <div class="subcat-label">🧆 No Meat, No Problem</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Falafel Plate','$1,400','Grilled falafel served with hummus and pita bread','','Vegetarian')"><div class="item-card-body"><div class="item-header"><div class="item-name">Falafel 🧆</div><div class="item-price">$1,400</div></div><div class="item-desc">Grilled falafel served with hummus and pita bread</div><div class="item-footer"><span class="item-emoji">🧆</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Chickpea/Falafel Panini','$1,300','Toasted foot long bread with lettuce, tomato & cheese','','Vegetarian')"><div class="item-card-body"><div class="item-header"><div class="item-name">Chickpea/Falafel Panini 🥖</div><div class="item-price">$1,300</div></div><div class="item-desc">Toasted foot long bread with lettuce, tomato & cheese</div><div class="item-footer"><span class="item-emoji">🥖</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Veggie Burger','$1,400','Veggie patty, lettuce, tomato & cheese on a toasted bun','','Vegetarian')"><div class="item-card-body"><div class="item-header"><div class="item-name">Veggie Burger 🍔</div><div class="item-price">$1,400</div></div><div class="item-desc">Veggie patty, lettuce, tomato & cheese on a toasted bun</div><div class="item-footer"><span class="item-emoji">🍔</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Veggie Wrap','$1,000','Fresh tortilla with all organic veggies from the tropics','','Vegetarian')"><div class="item-card-body"><div class="item-header"><div class="item-name">Veggie Wrap 🌯</div><div class="item-price">$1,000</div></div><div class="item-desc">Fresh tortilla with all organic veggies from the tropics</div><div class="item-footer"><span class="item-emoji">🌯</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Burgers -->
+  <div class="subcat">
+    <div class="subcat-label">🍔 Burgers + Fries</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Flaming Burger','$1,200','Beef patty, lettuce, tomato, cheese and onions','','Burgers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Flaming Burger 🍔</div><div class="item-price">$1,200</div></div><div class="item-desc">Beef patty, lettuce, tomato, cheese and onions</div><div class="item-footer"><span class="item-emoji">🔥</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Chicken Burger','$1,150','Chicken patty, lettuce, tomato, cheese & onion','','Burgers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Chicken Burger 🍔</div><div class="item-price">$1,150</div></div><div class="item-desc">Chicken patty, lettuce, tomato, cheese & onion</div><div class="item-footer"><span class="item-emoji">🍗</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('YOLO Signature Burger','$1,650','Angus beef patty, egg, bacon, cheese & onion rings on a toasted bread','The signature YOLO experience in a burger!','Burgers')"><div class="item-card-body"><div class="item-header"><div class="item-name">YOLO Signature Burger ⭐</div><div class="item-price">$1,650</div></div><div class="item-desc">Angus beef patty, egg, bacon, cheese & onion rings on a toasted bread</div><div class="item-footer"><span class="item-emoji">⭐</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Double Cheeseburger','$1,600','2 patties, lettuce, cheese, tomato & onion','','Burgers')"><div class="item-card-body"><div class="item-header"><div class="item-name">Double Cheeseburger 🍔🍔</div><div class="item-price">$1,600</div></div><div class="item-desc">2 patties, lettuce, cheese, tomato & onion</div><div class="item-footer"><span class="item-emoji">🧀</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+
+  <!-- Lunch Sides -->
+  <div class="subcat">
+    <div class="subcat-label">🍟 Sides</div>
+    <div class="sides-list">
+      <div class="side-item" onclick="openModal('Fries','$350','Crispy golden fries per serving 🍟','','Sides · Lunch')"><div class="side-left"><span class="side-emoji">🍟</span><span class="side-name">Fries</span></div><span class="side-price">$350</span></div>
+      <div class="side-item" onclick="openModal('Corn','$400','Corn per serving 🌽','','Sides · Lunch')"><div class="side-left"><span class="side-emoji">🌽</span><span class="side-name">Corn</span></div><span class="side-price">$400</span></div>
+      <div class="side-item" onclick="openModal('Chicken','$300','Chicken per serving 🍗','','Sides · Lunch')"><div class="side-left"><span class="side-emoji">🍗</span><span class="side-name">Chicken</span></div><span class="side-price">$300</span></div>
+      <div class="side-item" onclick="openModal('Cheese','$150','Cheese per serving 🧀','','Sides · Lunch')"><div class="side-left"><span class="side-emoji">🧀</span><span class="side-name">Cheese</span></div><span class="side-price">$150</span></div>
+      <div class="side-item" onclick="openModal('Bacon','$300','Bacon per serving 🥓','','Sides · Lunch')"><div class="side-left"><span class="side-emoji">🥓</span><span class="side-name">Bacon</span></div><span class="side-price">$300</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ KIDS MEAL ══════════════════ -->
+<div class="menu-section" id="kids">
+  <div class="menu-section-header">
+    <span style="font-size:1.5rem">🌭</span>
+    <div class="menu-section-title">Kids Meal</div>
+    <div class="menu-section-sub">For Our Youngest Guests</div>
+  </div>
+
+  <div class="subcat">
+    <div class="subcat-label">🍪 Main + Drinks + Dessert</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Kids Full Combo','$1,500','Choose your main, drink & dessert for one special price!','Main: Kids Cheeseburger, Grilled Cheese Sandwich or Hotdog\nDrink: Water, Soda or Lemonade\nDessert: Ice-Cream Sundae or Kids Milkshake','Kids Meal')">
+        <div class="item-card-body">
+          <div class="item-header"><div class="item-name">Full Kids Combo 🎉</div><div class="item-price">$1,500</div></div>
+          <div class="item-desc"><strong>Main:</strong> Cheeseburger, Grilled Cheese Sandwich or Hotdog<br><strong>Drink:</strong> Water, Soda or Lemonade<br><strong>Dessert:</strong> Ice-Cream Sundae or Kids Milkshake</div>
+          <div class="item-footer"><span class="item-emoji">🍪</span><button class="btn-details">View Details</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subcat">
+    <div class="subcat-label">🍔 Singles / Combos</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Hotdog','$350','A kids classic hotdog 🌭','','Kids Meal')"><div class="item-card-body"><div class="item-header"><div class="item-name">Hotdog 🌭</div><div class="item-price">$350</div></div><div class="item-desc">A kids classic hotdog</div><div class="item-footer"><span class="item-emoji">🌭</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Nuggets & Fries','$600','Chicken nuggets with fries 🍟','','Kids Meal')"><div class="item-card-body"><div class="item-header"><div class="item-name">Nuggets & Fries 🍟</div><div class="item-price">$600</div></div><div class="item-desc">Chicken nuggets with fries</div><div class="item-footer"><span class="item-emoji">🍗</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Tenders & Fries','$900','Chicken tenders with fries 🍟','','Kids Meal')"><div class="item-card-body"><div class="item-header"><div class="item-name">Tenders & Fries 🍗</div><div class="item-price">$900</div></div><div class="item-desc">Chicken tenders with fries</div><div class="item-footer"><span class="item-emoji">🍗</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Kids Cheeseburger','$950','Kids-sized cheeseburger 🍔','','Kids Meal')"><div class="item-card-body"><div class="item-header"><div class="item-name">Cheeseburger 🍔</div><div class="item-price">$950</div></div><div class="item-desc">Kids-sized cheeseburger</div><div class="item-footer"><span class="item-emoji">🍔</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Loaded Fries','$750','Fries loaded with all the good stuff 🍟','','Kids Meal')"><div class="item-card-body"><div class="item-header"><div class="item-name">Loaded Fries 🍟</div><div class="item-price">$750</div></div><div class="item-desc">Fries loaded with all the good stuff</div><div class="item-footer"><span class="item-emoji">🍟</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ DESSERT ══════════════════ -->
+<div class="menu-section" id="dessert">
+  <div class="menu-section-header">
+    <span style="font-size:1.5rem">🍨</span>
+    <div class="menu-section-title">Dessert</div>
+    <div class="menu-section-sub">Sweet Endings</div>
+  </div>
+
+  <div class="subcat">
+    <div class="subcat-label">🍪 Desserts</div>
+    <p style="font-size:0.78rem;color:var(--mid);margin-bottom:1rem;font-weight:300;">Choice of hot fudge, caramel or strawberry syrup with nuts</p>
+    <div class="items-grid">
+      <div class="item-card" onclick="openModal('Caramel Apple Chips','$700','Choice of hot fudge, caramel or strawberry syrup with nuts 🍎','','Dessert')"><div class="item-card-body"><div class="item-header"><div class="item-name">Caramel Apple Chips 🍎</div><div class="item-price">$700</div></div><div class="item-desc">Choice of hot fudge, caramel or strawberry syrup with nuts</div><div class="item-footer"><span class="item-emoji">🍏</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Banana Split','$950','Classic banana split with your choice of hot fudge, caramel or strawberry syrup with nuts 🍌','','Dessert')"><div class="item-card-body"><div class="item-header"><div class="item-name">Banana Split 🍌</div><div class="item-price">$950</div></div><div class="item-desc">Classic banana split with your choice of syrup and nuts</div><div class="item-footer"><span class="item-emoji">🍦</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Sizzling Brownie With Vanilla Ice-Cream','$850','Warm sizzling brownie topped with vanilla ice-cream 🍦','Choice of hot fudge, caramel or strawberry syrup with nuts','Dessert')"><div class="item-card-body"><div class="item-header"><div class="item-name">Sizzling Brownie 🍫</div><div class="item-price">$850</div></div><div class="item-desc">Warm sizzling brownie topped with vanilla ice-cream</div><div class="item-footer"><span class="item-emoji">🍦</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Sundae','$700','Ice-cream sundae with your choice of hot fudge, caramel or strawberry syrup with nuts 🍨','','Dessert')"><div class="item-card-body"><div class="item-header"><div class="item-name">Sundae 🍨</div><div class="item-price">$700</div></div><div class="item-desc">Ice-cream sundae with your choice of syrup and nuts</div><div class="item-footer"><span class="item-emoji">🍨</span><button class="btn-details">View Details</button></div></div></div>
+      <div class="item-card" onclick="openModal('Sandwich Cookie','$1,300','A decadent sandwich cookie dessert 🍪','Choice of hot fudge, caramel or strawberry syrup with nuts','Dessert')"><div class="item-card-body"><div class="item-header"><div class="item-name">Sandwich Cookie 🍪</div><div class="item-price">$1,300</div></div><div class="item-desc">A decadent sandwich cookie dessert with your choice of syrup and nuts</div><div class="item-footer"><span class="item-emoji">🍪</span><button class="btn-details">View Details</button></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER CTA -->
+<div style="text-align:center;padding:3rem 0 1rem;border-top:1px solid var(--border);margin-top:2rem;">
+  <p style="color:var(--mid);font-size:0.9rem;font-weight:300;margin-bottom:1.2rem;">Ready to order or have questions? Reach us on WhatsApp!</p>
+  <a href="https://wa.me/18763484973" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 2.2rem;background:#25D366;color:#fff;border-radius:4px;font-size:0.88rem;font-weight:700;text-decoration:none;transition:.2s;">💬 Order via WhatsApp</a>
+  </div>
+
+</div><!-- end menu-body -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">Item Name</div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:.2rem;" id="modalCategory">Category</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-price" id="modalPrice">$0</div>
+      <p class="modal-desc" id="modalDesc">Description</p>
+      <div id="modalNote" style="display:none;background:var(--cream);border-left:3px solid var(--amber);padding:.75rem 1rem;border-radius:0 4px 4px 0;font-size:.8rem;color:var(--mid);line-height:1.6;margin-bottom:1rem;"></div>
+      <div id="modalTags"></div>
+      <div class="modal-actions">
+        <a href="https://wa.me/18763484973" target="_blank" class="btn-modal-wa">💬 Order on WhatsApp</a>
+        <button class="btn-modal-close" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function scrollTo(id, btn){
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function openModal(name, price, desc, note, category){
+  document.getElementById('modalTitle').textContent = name;
+  document.getElementById('modalPrice').textContent = price;
+  document.getElementById('modalDesc').textContent = desc;
+  document.getElementById('modalCategory').textContent = category;
+  const noteEl = document.getElementById('modalNote');
+  if(note && note.trim()){
+    noteEl.style.display='block';
+    noteEl.innerHTML = '📝 ' + note.replace(/\n/g,'<br>');
+  } else { noteEl.style.display='none'; }
+  document.getElementById('modalTags').innerHTML =
+    ['All Day', 'Junction & Black River', 'JMD Pricing']
+    .map(t=>`<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeModalOnBg(e){
+  if(e.target === document.getElementById('modalOverlay')) closeModal();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// Search
+function filterMenu(val){
+  const q=val.toLowerCase().trim();
+  const cards=[...document.querySelectorAll('.item-card, .side-item')];
+  let shown=0;
+  cards.forEach(c=>{
+    const txt=c.textContent.toLowerCase();
+    const vis=!q||txt.includes(q);
+    c.style.display=vis?'':'none';
+    if(vis)shown++;
+  });
+  const count=document.getElementById('searchCount');
+  count.textContent=q?`${shown} result${shown!==1?'s':''} found`:'';
+}
+
+// Hash scroll
+if(location.hash){
+  setTimeout(()=>{
+    const el=document.querySelector(location.hash);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  },400);
+}
+
+// Update active tab on scroll
+const sections=['breakfast','coffee','lunch','kids','dessert'];
+const tabBtns=document.querySelectorAll('.tab-btn');
+window.addEventListener('scroll',()=>{
+  let current='breakfast';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop - 150) current=id;
+  });
+  tabBtns.forEach((b,i)=>{
+    b.classList.toggle('active', sections[i]===current);
+  });
+});
+</script>
+<script>
+function scrollToSection(id, btn) {
+  // scroll to section
+  document.getElementById(id).scrollIntoView({
+    behavior: "smooth"
+  });
+
+  // remove active from all buttons
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+  // add active to clicked button
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

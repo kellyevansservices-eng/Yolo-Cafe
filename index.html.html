@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOLO Cafe — Junction & Black River, Jamaica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --espresso: #1E120A;
+    --mocha: #3D2010;
+    --amber: #C4872A;
+    --amber-light: #E8A840;
+    --cream: #FDF7EE;
+    --warm-white: #FFFBF5;
+    --sage: #4A7259;
+    --sage-light: #6B9E7A;
+    --blush: #F5E8D8;
+    --text-dark: #1E120A;
+    --text-mid: #6B5040;
+    --text-light: #A08060;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--warm-white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ====== NAV ====== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 4rem;
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(30,18,10,0.96);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.25);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 600; color: #fff;
+    letter-spacing: 0.08em; text-decoration: none;
+  }
+  .nav-logo span { color: var(--amber-light); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82); text-decoration: none;
+    font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--amber-light); }
+  .nav-cta {
+    background: var(--amber); color: #fff !important;
+    padding: 0.5rem 1.25rem; border-radius: 2px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--amber-light) !important; color: var(--espresso) !important; }
+
+  /* ====== HERO ====== */
+  .hero {
+    position: relative; height: 100vh; min-height: 640px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://insanelygoodrecipes.com/wp-content/uploads/2020/07/Cup-Of-Creamy-Coffee-1024x536.png');
+    background-size: cover; background-position: center;
+    transform: scale(1.08);
+    transition: transform 12s ease-out;
+  }
+  .hero-bg.loaded { transform: scale(1); }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(30,18,10,0.72) 0%, rgba(30,18,10,0.45) 50%, rgba(61,32,16,0.62) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2; text-align: center; padding: 0 2rem;
+    animation: fadeUp 1.2s ease both;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: 'Outfit', sans-serif; font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber-light);
+    border: 1px solid rgba(232,168,64,0.5); padding: 0.35rem 1.1rem;
+    margin-bottom: 1.5rem; border-radius: 1px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 9vw, 7.5rem);
+    font-weight: 300; color: #fff; line-height: 1.0;
+    margin-bottom: 1.25rem; letter-spacing: -0.01em;
+  }
+  .hero-title em { font-style: italic; color: var(--amber-light); }
+  .hero-sub {
+    font-size: 1.05rem; color: rgba(255,255,255,0.78);
+    font-weight: 300; max-width: 520px; margin: 0 auto 2.5rem;
+    line-height: 1.7; letter-spacing: 0.01em;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-block; padding: 0.85rem 2.2rem;
+    background: var(--amber); color: #fff;
+    text-decoration: none; font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border-radius: 2px; transition: all 0.25s;
+  }
+  .btn-primary:hover { background: var(--amber-light); color: var(--espresso); transform: translateY(-2px); }
+  .btn-outline {
+    display: inline-block; padding: 0.85rem 2.2rem;
+    border: 1.5px solid rgba(255,255,255,0.55); color: #fff;
+    text-decoration: none; font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border-radius: 2px; transition: all 0.25s;
+  }
+  .btn-outline:hover { border-color: var(--amber-light); color: var(--amber-light); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.5); font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; display: flex; flex-direction: column;
+    align-items: center; gap: 0.6rem; animation: bounce 2s infinite;
+  }
+  .hero-scroll::after {
+    content: ''; display: block; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(232,168,64,0.8), transparent);
+  }
+
+  /* ====== RATINGS STRIP ====== */
+  .strip {
+    background: var(--espresso); padding: 1rem 4rem;
+    display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap;
+  }
+  .strip-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    color: rgba(255,255,255,0.7); font-size: 0.82rem; letter-spacing: 0.06em;
+  }
+  .strip-item strong { color: var(--amber-light); font-weight: 600; }
+  .stars { color: var(--amber-light); letter-spacing: 0.05em; }
+
+  /* ====== SECTIONS ====== */
+  section { padding: 6rem 4rem; }
+
+  .section-eyebrow {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--amber);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 400;
+    color: var(--espresso); line-height: 1.15; margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--sage); }
+
+  /* ====== ABOUT ====== */
+  .about { background: var(--cream); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto;
+  }
+  .about-img-wrap { position: relative; }
+  .about-img {
+    width: 100%; height: 520px; object-fit: cover;
+    border-radius: 2px;
+  }
+  .about-badge {
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    background: var(--espresso); color: var(--amber-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem; font-style: italic;
+    padding: 1.5rem 2rem; border-radius: 2px;
+    max-width: 200px; line-height: 1.4;
+    box-shadow: 0 8px 32px rgba(30,18,10,0.25);
+  }
+  .about-text { padding-left: 1rem; }
+  .about-text p {
+    color: var(--text-mid); line-height: 1.9; font-size: 1.02rem;
+    margin-bottom: 1.25rem; font-weight: 300;
+  }
+  .about-highlights {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin-top: 2rem;
+  }
+  .highlight-item {
+    background: var(--warm-white); padding: 1.2rem 1.4rem;
+    border-left: 3px solid var(--amber); border-radius: 0 2px 2px 0;
+  }
+  .highlight-item h4 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.15rem;
+    color: var(--espresso); margin-bottom: 0.25rem;
+  }
+  .highlight-item p { font-size: 0.82rem; color: var(--text-light); margin: 0; line-height: 1.5; }
+
+  /* ====== MENU ====== */
+  .menu { background: var(--warm-white); }
+  .menu-header { text-align: center; margin-bottom: 3.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .menu-header p { color: var(--text-mid); font-size: 1.02rem; font-weight: 300; line-height: 1.7; }
+  .menu-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 1100px; margin: 0 auto 3rem;
+  }
+  .menu-card {
+    border-radius: 4px; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .menu-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(30,18,10,0.14); }
+  .menu-card-img {
+    width: 100%; height: 220px; object-fit: cover;
+    display: block;
+  }
+  .menu-card-body {
+    padding: 1.4rem 1.5rem;
+    background: #fff; border: 1px solid rgba(30,18,10,0.07);
+    border-top: none;
+  }
+  .menu-card-tag {
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--amber);
+    margin-bottom: 0.4rem; display: block;
+  }
+  .menu-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem; color: var(--espresso); font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .menu-card-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.6; font-weight: 300; }
+
+  .menu-feature {
+    max-width: 1100px; margin: 0 auto;
+    background: var(--espresso); border-radius: 4px; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1.2fr;
+  }
+  .menu-feature-img { width: 100%; height: 100%; object-fit: cover; min-height: 300px; }
+  .menu-feature-text {
+    padding: 3rem; color: rgba(255,255,255,0.85);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .menu-feature-text .section-eyebrow { color: var(--amber-light); }
+  .menu-feature-text .section-title { color: #fff; margin-bottom: 1rem; }
+  .menu-feature-text p { font-size: 0.95rem; line-height: 1.8; font-weight: 300; margin-bottom: 1.5rem; }
+  .menu-tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: rgba(196,135,42,0.2); color: var(--amber-light);
+    font-size: 0.75rem; padding: 0.3rem 0.8rem; border-radius: 1px;
+    border: 1px solid rgba(196,135,42,0.3); letter-spacing: 0.05em;
+  }
+
+  /* ====== EXPERIENCE ====== */
+  .experience {
+    background: var(--blush); text-align: center;
+    padding: 5rem 4rem;
+  }
+  .experience-inner { max-width: 860px; margin: 0 auto; }
+  .experience-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 300;
+    color: var(--espresso); line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  .experience-title em { font-style: italic; color: var(--amber); }
+  .experience-sub { color: var(--text-mid); font-size: 1.05rem; font-weight: 300; line-height: 1.8; margin-bottom: 3rem; }
+  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; max-width: 700px; margin: 0 auto; }
+  .stat-box { text-align: center; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 600; color: var(--espresso);
+    display: block; line-height: 1;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--text-light); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.4rem; display: block; }
+
+  /* ====== LOCATIONS ====== */
+  .locations { background: var(--warm-white); }
+  .locations-header { text-align: center; margin-bottom: 3.5rem; }
+  .locations-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2rem; max-width: 900px; margin: 0 auto;
+  }
+  .location-card {
+    background: var(--cream); border-radius: 4px;
+    overflow: hidden; border: 1px solid rgba(30,18,10,0.08);
+    transition: box-shadow 0.3s;
+  }
+  .location-card:hover { box-shadow: 0 12px 36px rgba(30,18,10,0.12); }
+  .location-card-img { width: 100%; height: 200px; object-fit: cover; display: block; }
+  .location-card-body { padding: 2rem; }
+  .location-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 500; color: var(--espresso); margin-bottom: 0.25rem;
+  }
+  .location-sub { font-size: 0.8rem; color: var(--amber); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.2rem; font-weight: 600; }
+  .location-info { list-style: none; }
+  .location-info li {
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    padding: 0.55rem 0; border-bottom: 1px solid rgba(30,18,10,0.06);
+    font-size: 0.9rem; color: var(--text-mid); font-weight: 300;
+  }
+  .location-info li:last-child { border-bottom: none; }
+  .loc-icon { font-size: 1rem; margin-top: 0.05rem; flex-shrink: 0; }
+  .location-info a { color: var(--amber); text-decoration: none; }
+  .location-info a:hover { text-decoration: underline; }
+
+  /* ====== REVIEWS ====== */
+  .reviews-section { background: var(--espresso); padding: 6rem 4rem; }
+  .reviews-inner { max-width: 1100px; margin: 0 auto; }
+  .reviews-header { margin-bottom: 3rem; }
+  .reviews-header .section-title { color: #fff; }
+  .reviews-header .section-eyebrow { color: var(--amber-light); }
+  .reviews-row {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 1.5rem;
+  }
+  .review-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px; padding: 1.8rem;
+  }
+  .review-stars { color: var(--amber-light); font-size: 0.9rem; letter-spacing: 0.05em; margin-bottom: 0.8rem; }
+  .review-text { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.75; font-weight: 300; margin-bottom: 1.2rem; }
+  .review-author { color: rgba(255,255,255,0.45); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .review-overall {
+    margin-top: 3rem; text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2.5rem;
+  }
+  .review-score {
+    font-family: 'Cormorant Garamond', serif; font-size: 5rem;
+    font-weight: 300; color: var(--amber-light); line-height: 1;
+  }
+  .review-source { color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.5rem; }
+
+  /* ====== INSTAGRAM ====== */
+  .instagram { background: var(--cream); text-align: center; padding: 5rem 4rem; }
+  .insta-header { margin-bottom: 2.5rem; }
+  .insta-handle {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic;
+    color: var(--espresso); text-decoration: none;
+    border-bottom: 2px solid var(--amber);
+    padding-bottom: 0.15rem; transition: color 0.2s;
+  }
+  .insta-handle:hover { color: var(--amber); }
+  .insta-grid {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 0.8rem; max-width: 900px; margin: 2rem auto 0;
+  }
+  .insta-tile {
+    aspect-ratio: 1; overflow: hidden; border-radius: 4px;
+    position: relative; cursor: pointer;
+  }
+  .insta-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .insta-tile:hover img { transform: scale(1.08); }
+  .insta-tile-overlay {
+    position: absolute; inset: 0;
+    background: rgba(30,18,10,0.4); opacity: 0;
+    transition: opacity 0.3s; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.5rem;
+  }
+  .insta-tile:hover .insta-tile-overlay { opacity: 1; }
+
+  /* ====== CTA ====== */
+  .cta-section {
+    background: var(--sage); padding: 5rem 4rem; text-align: center;
+  }
+  .cta-section .section-title { color: #fff; }
+  .cta-section .section-eyebrow { color: rgba(255,255,255,0.6); }
+  .cta-section p { color: rgba(255,255,255,0.75); font-size: 1.05rem; font-weight: 300; margin: 0 auto 2.5rem; max-width: 520px; line-height: 1.7; }
+
+  /* ====== FOOTER ====== */
+  footer {
+    background: var(--espresso); color: rgba(255,255,255,0.55);
+    padding: 4rem 4rem 2.5rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; max-width: 1100px; margin: 0 auto 3rem;
+  }
+  .footer-brand .nav-logo { display: block; margin-bottom: 1rem; font-size: 1.8rem; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.7; font-weight: 300; max-width: 260px; }
+  .footer-col h4 {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--amber-light);
+    margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.65rem; }
+  .footer-col ul li a {
+    color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.88rem;
+    font-weight: 300; transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--amber-light); }
+  .footer-col ul li span { font-size: 0.88rem; font-weight: 300; }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1100px; margin: 0 auto;
+    font-size: 0.78rem;
+  }
+  .social-links { display: flex; gap: 1rem; }
+  .social-link {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%; color: rgba(255,255,255,0.5); text-decoration: none;
+    font-size: 0.8rem; transition: all 0.2s;
+  }
+  .social-link:hover { border-color: var(--amber-light); color: var(--amber-light); }
+
+  /* ====== ANIMATIONS ====== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(-8px); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid, .menu-feature, .locations-grid { grid-template-columns: 1fr; }
+    .menu-grid { grid-template-columns: repeat(2,1fr); }
+    .reviews-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .about-badge { right: 0; }
+    .insta-grid { grid-template-columns: repeat(2,1fr); }
+    .stats-row { grid-template-columns: repeat(3,1fr); }
+  }
+  @media (max-width: 600px) {
+    .menu-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr; gap: 1.5rem; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .strip { padding: 1rem 1.5rem; gap: 1.5rem; }
+    .hero-btns { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">YOLO<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Our Story</a></li>
+    <a href="menu.html">Menu</a>
+    <li><a href="#locations">Locations</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="tel:+18763484973" class="nav-cta">Reserve Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">YOLO <em>Café</em></h1>
+    <p class="hero-sub">A world-class café experience rooted in community, crafted with the freshest local ingredients, and served all day long.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">Explore Menu</a>
+      <a href="#locations" class="btn-outline">Find Us</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item"><span class="stars">★★★★★</span> <strong>4.7</strong> Google Rating</div>
+  <div class="strip-item">☕ Breakfast Served All Day</div>
+  <div class="strip-item">🌿 Supporting Local Farmers</div>
+  <div class="strip-item">📍 Two Locations</div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <img class="about-img" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAFiSjPzLNJFUlc_fNo-QxBAeAL8ka0eCU48qe8m9nFrP5Z0vszN_iieRv-qdMPTlPO7y94Bl9H8kL7H-3zuRxmGqYsfYwiu6jK_06PMkvTJN3xNy3IJE4KH2yFF7u_G1iKCtL3-Dg=s680-w680-h510-rw" alt="Yolo Cafe interior – cozy and warm atmosphere" loading="lazy">
+      <div class="about-badge">"A unique experience where warmth meets world-class coffee."</div>
+    </div>
+    <div class="about-text reveal reveal-delay-1">
+      <div class="section-eyebrow">Our Story</div>
+      <h2 class="section-title">More Than a Café —<br><em>A Community</em></h2>
+      <p>Step into YOLO Cafe and discover what happens when passion meets purpose. Born from a mother-daughter vision of bringing world-class coffee culture to St. Elizabeth, YOLO is a place where every cup tells a story.</p>
+      <p>We partner with local Jamaican farmers to source the freshest ingredients, ensuring that every bite and sip you enjoy directly supports the community we love. From our first location in Junction to our newest home in Black River, we're growing — one guest at a time.</p>
+      <div class="about-highlights">
+        <div class="highlight-item">
+          <h4>All-Day Breakfast</h4>
+          <p>Morning or afternoon, our full breakfast menu is always available</p>
+        </div>
+        <div class="highlight-item">
+          <h4>Locally Sourced</h4>
+          <p>Supporting Jamaican farmers with every ingredient we use</p>
+        </div>
+        <div class="highlight-item">
+          <h4>Family Owned</h4>
+          <p>A mother-daughter team pouring their hearts into every detail</p>
+        </div>
+        <div class="highlight-item">
+          <h4>Vegetarian Friendly</h4>
+          <p>Diverse menu options for every taste and dietary need</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="menu-header reveal">
+    <div class="section-eyebrow">The Menu</div>
+    <h2 class="section-title">Crafted with <em>Love & Care</em></h2>
+    <p>From signature frappes to hearty burgers, our diverse menu has something to delight every palate — breakfast served all day long.</p>
+  </div>
+
+  <div class="menu-grid">
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=85" alt="Specialty coffee drinks" loading="lazy">
+      <div class="menu-card-body">
+        <span class="menu-card-tag">Beverages</span>
+        <div class="menu-card-name">Specialty Coffee</div>
+        <p class="menu-card-desc">From classic espressos to our famous Churros Frappé — limited seasonal creations you won't find anywhere else in St. Elizabeth.</p>
+      </div>
+    </div>
+    <div class="menu-card reveal reveal-delay-1">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=600&q=85" alt="All-day breakfast plates" loading="lazy">
+      <div class="menu-card-body">
+        <span class="menu-card-tag">All Day Breakfast</span>
+        <div class="menu-card-name">Full Breakfast Plates</div>
+        <p class="menu-card-desc">Rise and shine — or dine any time. Our hearty breakfast spread is available morning, noon, and everything in between.</p>
+      </div>
+    </div>
+    <div class="menu-card reveal reveal-delay-2">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=85" alt="Gourmet burgers and mains" loading="lazy">
+      <div class="menu-card-body">
+        <span class="menu-card-tag">Mains</span>
+        <div class="menu-card-name">Burgers & Paninis</div>
+        <p class="menu-card-desc">Stacked burgers, pressed paninis, crispy wings, and fresh salads — real food made with real ingredients, every time.</p>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600&q=85" alt="Fresh tropical smoothies" loading="lazy">
+      <div class="menu-card-body">
+        <span class="menu-card-tag">Drinks</span>
+        <div class="menu-card-name">Tropical Smoothies</div>
+        <p class="menu-card-desc">Blended with fresh tropical fruits, our smoothies are the perfect Caribbean companion to any meal or on-the-go refresh.</p>
+      </div>
+    </div>
+    <div class="menu-card reveal reveal-delay-1">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=85" alt="Fresh salads and light meals" loading="lazy">
+      <div class="menu-card-body">
+        <span class="menu-card-tag">Light & Fresh</span>
+        <div class="menu-card-name">Salads & Tacos</div>
+        <p class="menu-card-desc">Crisp, colourful, and vibrant — our salads and tacos bring freshness and flair for vegetarians and meat-lovers alike.</p>
+      </div>
+    </div>
+    <div class="menu-card reveal reveal-delay-2">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=85" alt="Fresh pastries and baked goods" loading="lazy">
+      <div class="menu-card-body">
+        <span class="menu-card-tag">Baked Goods</span>
+        <div class="menu-card-name">Pastries & Bites</div>
+        <p class="menu-card-desc">Freshly baked pastries to pair with your morning coffee. Buttery, flaky, and made to satisfy every kind of sweet tooth.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-feature reveal">
+    <img class="menu-feature-img" src="https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=800&q=85" alt="Matcha drinks at Yolo Cafe" loading="lazy">
+    <div class="menu-feature-text">
+      <div class="section-eyebrow">Featured Experience</div>
+      <h3 class="section-title" style="font-size:2rem; color:#fff;">The Best Matcha<br><em>Experience in St. Elizabeth</em></h3>
+      <p>Our matcha program has been turning heads and winning hearts. Crafted with ceremonial-grade matcha and perfectly frothed milk, it's become one of YOLO's most beloved signatures — and social media's favourite stop in Junction.</p>
+      <div class="menu-tag-cloud">
+        <span class="tag">Matcha Latte</span>
+        <span class="tag">Iced Matcha</span>
+        <span class="tag">Churros Frappé</span>
+        <span class="tag">Cold Brew</span>
+        <span class="tag">Seasonal Specials</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience" id="experience">
+  <div class="experience-inner">
+    <div class="section-eyebrow reveal">Why YOLO</div>
+    <h2 class="experience-title reveal reveal-delay-1">An <em>Aesthetic</em> You'll Want<br>to Come Back For</h2>
+    <p class="experience-sub reveal reveal-delay-2">YOLO Cafe isn't just about food and coffee — it's an experience. From the warm, sunlit interiors to the carefully curated menu, every detail is designed to make you feel at home in Jamaica's most charming café.</p>
+    <div class="stats-row">
+      <div class="stat-box reveal">
+        <span class="stat-num">4.7</span>
+        <span class="stat-label">Google Rating</span>
+      </div>
+      <div class="stat-box reveal reveal-delay-1">
+        <span class="stat-num">2</span>
+        <span class="stat-label">Locations</span>
+      </div>
+      <div class="stat-box reveal reveal-delay-2">
+        <span class="stat-num">2.9K</span>
+        <span class="stat-label">Instagram Followers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATIONS -->
+<section class="locations" id="locations">
+  <div class="locations-header">
+    <div class="section-eyebrow reveal">Find Us</div>
+    <h2 class="section-title reveal reveal-delay-1">Two Locations,<br><em>One YOLO Family</em></h2>
+  </div>
+  <div class="locations-grid">
+    <div class="location-card reveal">
+            <div class="location-card-body">
+        <div class="location-name">Junction</div>
+        <div class="location-sub">St. Elizabeth · Original Location</div>
+        <ul class="location-info">
+          <li><span class="loc-icon">📍</span> Shop #B1 Junction City Centre Plaza, Junction</li>
+          <li><span class="loc-icon">📞</span> <a href="tel:+18763484973">(876) 348-4973</a></li>
+          <li><span class="loc-icon">🕖</span> Opens 7:00 AM Monday – Saturday</li>
+          <li><span class="loc-icon">☕</span> Breakfast served all day · Dine in & Takeaway</li>
+        </ul>
+      </div>
+    </div>
+    <div class="location-card reveal reveal-delay-1">
+           <div class="location-card-body">
+        <div class="location-name">Black River</div>
+        <div class="location-sub">St. Elizabeth · New Location</div>
+        <ul class="location-info">
+          <li><span class="loc-icon">📍</span> 1 Church Station Alley, Black River, St. Elizabeth, Jamaica</li>
+          <li><span class="loc-icon">📞</span> <a href="tel:+18765879536">(876) 587-9536</a></li>
+          <li><span class="loc-icon">🕖</span> Opens 7:00 AM Monday – Saturday</li>
+          <li><span class="loc-icon">☕</span> Breakfast served all day · Dine in & Takeaway</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="reviews">
+  <div class="reviews-inner">
+    <div class="reviews-header reveal">
+      <div class="section-eyebrow">What People Are Saying</div>
+      <h2 class="section-title">The YOLO<br><em>Experience</em></h2>
+    </div>
+    <div class="reviews-row">
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Had the pleasure of visiting Yolo cafe today with my husband and daughter. The food and service was a 10/10. Latte is one of the best I've ever tasted and I'm from the UK. The customer service here is also the best customer service I have ever experienced in Jamaica and I've been coming to Jamaica for over 30 years. Staff are extremely polite and helpful. Food service was great, we did not have to wait a long time. A clean , beautiful and well presented cafe. Lovely and cool inside. Would highly recommend to others x"</p>
+        <div class="review-author">— Google Reviewer</div>
+      </div>
+      <div class="review-card reveal reveal-delay-1">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Best matcha experience I've had in Jamaica — hands down. The atmosphere is gorgeous, the staff are warm, and the menu has something for everyone. A true gem."</p>
+        <div class="review-author">— Google Reviewer</div>
+      </div>
+      <div class="review-card reveal reveal-delay-2">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Recently renovated and uograded Yolo is definitely a game changer for modern comfortable relaxation, TV food display screens are boss! Now on another level. The cakes have always been excellent, moist and delicious. Coffee variety wide and perfect, presentation perfect, staff seem nice and pleasant, well mannered, service is a little slow. I'm yet to try the food menu, looks a little pricey but I won't mind paying if its good as the ambiance is worth it. Well done Yolo! JUNCTION IS LUCKY TO HAVE YOU! Highly recommended."</p>
+        <div class="review-author">— Google Reviewer</div>
+      </div>
+    </div>
+    <div class="review-overall reveal">
+      <div class="review-score">4.7</div>
+      <div class="review-source">Based on 38 Google Reviews</div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="instagram" id="instagram">
+  <div class="insta-header reveal">
+    <div class="section-eyebrow">Follow the Journey</div>
+    <h2 class="section-title" style="margin-bottom:0.5rem;">Life at <em>YOLO</em></h2>
+    <a href="https://instagram.com/yolocafe.dreamz" target="_blank" rel="noopener" class="insta-handle">@yolocafe.dreamz ↗</a>
+  </div>
+  <div class="insta-grid reveal reveal-delay-1">
+    <div class="insta-tile"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80" alt="Coffee at Yolo Cafe" loading="lazy"><div class="insta-tile-overlay">♡</div></div>
+    <div class="insta-tile"><img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=400&q=80" alt="Cafe ambiance" loading="lazy"><div class="insta-tile-overlay">♡</div></div>
+    <div class="insta-tile"><img src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=400&q=80" alt="Beautiful latte art" loading="lazy"><div class="insta-tile-overlay">♡</div></div>
+    <div class="insta-tile"><img src="https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&q=80" alt="Matcha drinks" loading="lazy"><div class="insta-tile-overlay">♡</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-eyebrow reveal">Ready for Your YOLO Moment?</div>
+  <h2 class="section-title reveal reveal-delay-1">Come In.<br><em>Stay a While.</em></h2>
+  <p class="reveal reveal-delay-2">Whether it's your first visit or your hundredth, there's always something new to discover at YOLO. Open Monday to Saturday — breakfast served all day.</p>
+  <div class="reveal reveal-delay-3">
+    <a href="tel:+18763484973" class="btn-primary" style="background:#fff; color: #2C6644; margin-right:1rem;">Call Junction</a>
+    <a href="tel:+18765879536" class="btn-outline" style="border-color:rgba(255,255,255,0.5);">Call Black River</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">YOLO<span>.</span></a>
+      <p>A world-class coffee shop experience rooted in community — serving the freshest food and beverage in St. Elizabeth, Jamaica since our founding.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="#locations">Locations</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Junction</h4>
+      <ul>
+        <li><a href="tel:+18763484973">(876) 348-4973</a></li>
+        <li><span>Shop #B1, Junction City Centre</span></li>
+        <li><span>Opens 7 AM · Mon – Sat</span></li>
+        <li><a href="https://goo.gl/maps/example" target="_blank">Get Directions ↗</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Black River</h4>
+      <ul>
+        <li><a href="tel:+18765879536">(876) 587-9536</a></li>
+        <li><span>Black River, St. Elizabeth</span></li>
+        <li><span>Check Instagram for Hours</span></li>
+        <li><a href="https://instagram.com/yolocafe.dreamz" target="_blank">@yolocafe.dreamz ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 YOLO Cafe · St. Elizabeth, Jamaica</span>
+    <div class="social-links">
+      <a href="https://instagram.com/yolocafe.dreamz" target="_blank" class="social-link" aria-label="Instagram">IG</a>
+      <a href="tel:+18763484973" class="social-link" aria-label="Call us">☎</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Hero bg parallax zoom
+  const heroBg = document.getElementById('heroBg');
+  setTimeout(() => heroBg.classList.add('loaded'), 100);
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
